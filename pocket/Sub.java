@@ -1,6 +1,11 @@
 package pocket;
 import java.util.*;
 
+/**
+ * An assembly of weaker and component classes of the larger classes.
+ * @author Maggie
+ *
+ */
 public class Sub 
 {
 	public static class Time
@@ -24,6 +29,11 @@ public class Sub
 		{
 			return new long[]{time,timeOp};
 		}
+		
+		public String toString()
+		{
+			return String.valueOf(time)+(timeOp==0?"":String.valueOf(timeOp));
+		}
 	}
 	
 	public static class Coordinate
@@ -37,14 +47,42 @@ public class Sub
 			this.coor = coor;
 		}
 		
+		public void setLati(double lati)
+		{
+			coor[0] = lati;
+		}
+		
+		public void setLng(double lng)
+		{
+			coor[1] = lng;
+		}
+		
 		public double[] getCoordinate()
 		{
 			return coor;
 		}
 		
+		public double getLati()
+		{
+			return coor[0];
+		}
+		
+		public double getLng()
+		{
+			return coor[1];
+		}
+		
+		public int hashCode()
+		{
+			return (int)((int)(coor[0]*Math.pow(10,3))*Math.pow(10,5))+(int)(coor[1]*Math.pow(10,3));
+		}
+		
 		public boolean equals(Object other)
 		{
-			return Arrays.equals(coor,((Coordinate)other).coor);
+			Coordinate cor = (Coordinate)(other);
+			if(Math.abs(cor.coor[0]-coor[0])<=0.0001&&Math.abs(cor.coor[1]-coor[1])<=0.0001)
+				return true;
+			return false;
 		}
 	}
 	
@@ -101,21 +139,29 @@ public class Sub
 	
 	public static class Description
 	{
-		private String des;
+		private Set<String> des = new HashSet<String>();
 		
 		public Description(String des)
 		{
-			this.des = des;
+			this.des.add(des);
 		}
 		
-		public Description(Description des)
+		public void add(Description des)
 		{
-			this.des = des.des;
+			this.des.addAll(des.des);
 		}
 		
-		public String getDescrption()
+		public boolean match(Description other)
 		{
-			return des;
+			for(String holder: other.des)
+				if(des.contains(holder))
+					return true;
+			return false;
+		}
+		
+		public String toString()
+		{
+			return des.size()==1?des.iterator().next():des.toString();
 		}
 	}
 	

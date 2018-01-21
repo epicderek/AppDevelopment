@@ -9,20 +9,20 @@ import java.util.*;
  */
 public class Event 
 {
-	private Time time;
-	private PhyLocation loc;
-	private List<Profile> part = new ArrayList<Profile>();
-	private Description des;
-	private static final Set<Event> events = new HashSet<Event>();
+	protected Description des;
+	protected Time time;
+	protected Location loc;
+	protected List<Profile> part = new ArrayList<Profile>();
+	static final List<Event> events = new ArrayList<Event>();
 	
 	/**
-	 * 
-	 * @param time
-	 * @param loc
-	 * @param des
+	 * Create an event as according to the description, the specific time, the location, and the possible affiliates. 
+	 * @param time The time of this event. 
+	 * @param loc The location this event advented, either a physical location or an abstract location of an app. 
+	 * @param des The description of this location. 
 	 * @param pro The profiles of the people associated with this event. 
 	 */
-	public Event(Time time, PhyLocation loc, Description des, Profile... pro)
+	public Event(Time time, Location loc, Description des, Profile... pro)
 	{
 		this.time = time;
 		this.loc = loc;
@@ -30,16 +30,34 @@ public class Event
 		Collections.addAll(part,pro);
 		events.add(this);
 		for(Profile holder: pro)
-			holder.addEvent(this);
+			holder.appendEvents(this);
 	}
 	
+	protected Event(Time time)
+	{
+		this.time = time;
+		events.add(this);
+	}
+	
+	
+	public void appendParticipants(Profile... profiles)
+	{
+		Collections.addAll(part,profiles);
+	}
+	
+	public void appendLocation(Location loc)
+	{
+		if(this.loc!=null)
+			throw new RuntimeException("Existent Location for this event.");
+		this.loc = loc;
+	}
 	
 	public Time getTime()
 	{
 		return time;
 	}
 	
-	public PhyLocation getLocation()
+	public Location getLocation()
 	{
 		return loc;
 	}
@@ -51,7 +69,7 @@ public class Event
 	
 	public Description getDescription()
 	{
-		return new Description(des);
+		return des;
 	}
 	
 	public static List<Event> searchEvent(Time time)
@@ -79,6 +97,11 @@ public class Event
 			if(holder.getParticipants().contains(pro))
 				output.add(holder);
 		return output;
+	}
+	
+	public String toString()
+	{
+		return String.format("Event: %s\nat time %s\nin %s\nof participants %s",des,time,loc,part);
 	}
 	
 	public static void main(String[] args) 

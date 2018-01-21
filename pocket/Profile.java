@@ -2,19 +2,85 @@ package pocket;
 import static pocket.Sub.*;
 import java.util.*;
 
+/**
+ * A comprehensive representation of a person as a contact. 
+ * @author Maggie
+ *
+ */
 public class Profile 
 {
+	/**
+	 * A specific description of the person.
+	 */
 	private Description des;
-	private List<Event> eve = new ArrayList<Event>();
-	private List<PhyLocation> loc = new ArrayList<PhyLocation>();
-	private static final Set<Profile> pros = new HashSet<Profile>();
+	/**
+	 * The name of the person.
+	 */
+	private String name;
+	/**
+	 * The email of the person.
+	 */
+	private String email;
+	/**
+	 * The phone number of the person.
+	 */
+	private String phone;
+	/**
+	 * The list of events the person is involved.
+	 */
+	protected List<Event> eve = new ArrayList<Event>();
+	/**
+	 * The list of locations the person is present.
+	 */
+	protected List<Location> loc = new ArrayList<Location>();
+	/**
+	 * All the existent profiles.
+	 */
+	static final Set<Profile> pros = new HashSet<Profile>();
 	
-	public Profile(Description des, PhyLocation[] loc, Event...eve)
+	public Profile(String name, String email, String phone)
 	{
-		this.des = des;
-		Collections.addAll(this.loc,loc);
-		Collections.addAll(this.eve,eve);
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
 		pros.add(this);
+	}
+	
+	protected Profile(String name)
+	{
+		this.name = name;
+	}
+	
+	public void addDial(String dial)
+	{
+		if(phone!=null)
+			throw new RuntimeException("Existent Phone Number");
+		phone = dial;
+	}
+	
+	public void addEmail(String email)
+	{
+		if(email!=null)
+			throw new RuntimeException("Existent Email");
+		this.email = email;
+	}
+	
+	public void appendDescription(Description des)
+	{
+		if(this.des==null)
+			this.des = des;
+		else
+			this.des.add(des);
+	}
+	
+	public void appendEvents(Event... eve)
+	{
+		Collections.addAll(this.eve,eve);
+	}
+	
+	public void appendLocations(Location... loca)
+	{
+		Collections.addAll(loc,loca);
 	}
 	
 	public Description getDescription()
@@ -22,14 +88,29 @@ public class Profile
 		return des;
 	}
 	
-	public void addEvent(Event eve)
+	public String getName()
 	{
-		this.eve.add(eve);
+		return name;
 	}
 	
-	public void addLocation(PhyLocation loca)
+	public String getDial()
 	{
-		loc.add(loca);
+		return phone;
+	}
+	
+	public String getEmail()
+	{
+		return email;
+	}
+	
+	public Set<Location> getLocations()
+	{
+		return new LinkedHashSet<Location>(loc);
+	}
+	
+	public Set<Event> getEvents()
+	{
+		return new LinkedHashSet<Event>(eve);
 	}
 	
 	public static boolean existent(Profile profile)
@@ -37,7 +118,20 @@ public class Profile
 		return pros.contains(profile);
 	}
 	
+	public int hashCode()
+	{
+		return name.hashCode();
+	}
 	
+	public boolean equals(Object other)
+	{
+		return name.equals(((Profile)other).name);
+	}
+	
+	public String toString()
+	{
+		return String.format("Profile of %s\nemail %s, dial %s",name,email,phone);
+	}
 	
 	public static void main(String[] args) 
 	{
