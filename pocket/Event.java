@@ -13,7 +13,7 @@ public class Event
 	protected Time time;
 	protected Location loc;
 	protected List<Profile> part = new ArrayList<Profile>();
-	static final List<Event> events = new ArrayList<Event>();
+	static final Map<Event,Event> eves = new HashMap<Event,Event>();
 	
 	/**
 	 * Create an event as according to the description, the specific time, the location, and the possible affiliates. 
@@ -22,23 +22,41 @@ public class Event
 	 * @param des The description of this location. 
 	 * @param pro The profiles of the people associated with this event. 
 	 */
-	public Event(Time time, Location loc, Description des, Profile... pro)
+	protected Event(Time time, Location loc, Description des, Profile... pro)
 	{
 		this.time = time;
 		this.loc = loc;
 		this.des = des;
 		Collections.addAll(part,pro);
-		events.add(this);
 		for(Profile holder: pro)
 			holder.appendEvents(this);
 	}
 	
+	/**
+	 * A reserved constructor for quick instantiation for sub-classes.
+	 * @param time The time the event occasioned.
+	 */
 	protected Event(Time time)
 	{
 		this.time = time;
-		events.add(this);
 	}
 	
+	/**
+	 * Process an Event object with the time, the location, the description, and the affiliated. 
+	 * @param time The time the event occasioned. 
+	 * @param loc The location the event occasioned.
+	 * @param des The description of the event.
+	 * @param pro The people involved. 
+	 * @return An Event object representing all the giving information.
+	 */
+	public static Event processEvent(Time time, Location loc, Description des, Profile... pro)
+	{
+		Event see = new Event(time,loc,des,pro);
+		if(eves.containsKey(see))
+			return eves.get(see);
+		eves.put(see,see);
+		return see;
+	}
 	
 	public void appendParticipants(Profile... profiles)
 	{
@@ -75,7 +93,7 @@ public class Event
 	public static List<Event> searchEvent(Time time)
 	{
 		List<Event> output = new ArrayList<Event>();
-		for(Event holder: events)
+		for(Event holder: eves.values())
 			if(holder.getTime().equals(time))
 				output.add(holder);
 		return output;
@@ -84,7 +102,7 @@ public class Event
 	public static List<Event> searchLocation(PhyLocation loc)
 	{
 		List<Event> output = new ArrayList<Event>();
-		for(Event holder: events)
+		for(Event holder: eves.values())
 			if(holder.getLocation().equals(loc))
 				output.add(holder);
 		return output;
@@ -93,7 +111,7 @@ public class Event
 	public static List<Event> searchAffiliate(Profile pro)
 	{
 		List<Event> output = new ArrayList<Event>();
-		for(Event holder: events)
+		for(Event holder: eves.values())
 			if(holder.getParticipants().contains(pro))
 				output.add(holder);
 		return output;
@@ -102,6 +120,16 @@ public class Event
 	public String toString()
 	{
 		return String.format("Event: %s\nat time %s\nin %s\nof participants %s",des,time,loc,part);
+	}
+	
+	public int hashCode()
+	{
+		return time.hashCode();
+	}
+	
+	public boolean equals(Object other)
+	{
+		return loc.equals(((Event)other).loc)&&des.equals(((Event)other).des);
 	}
 	
 	public static void main(String[] args) 

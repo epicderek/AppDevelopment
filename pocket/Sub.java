@@ -34,6 +34,16 @@ public class Sub
 		{
 			return String.valueOf(time)+(timeOp==0?"":String.valueOf(timeOp));
 		}
+		
+		public int hashCode()
+		{
+			return (int)time;
+		}
+		
+		public boolean equals(Object other)
+		{
+			return time==((Time)other).time;
+		}
 	}
 	
 	public static class Coordinate
@@ -164,6 +174,21 @@ public class Sub
 			return des.size()==1?des.iterator().next():des.toString();
 		}
 	}
+	
+	public static <T> void printArray(Collection<T> arr)
+	{
+		for(T holder: arr)
+			System.out.println(holder+"\n");
+		System.out.println("------------------------------------------------------------------------");
+	}
+	
+	public static void printArray(Object... objs)
+	{
+		for(Object holder: objs)
+			System.out.println(holder+"\n");
+		System.out.println("-----------------------------------------------------------------------");
+	}
+
 	
 	public static void main(String[] args) 
 	{

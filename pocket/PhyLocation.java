@@ -4,8 +4,6 @@ import static pocket.Sub.*;
 import java.io.IOException;
 import java.util.*;
 
-//AIzaSyAcqinQbVoIgQ6BX3paA5423pB1KeX6Em0
-//AIzaSyBP8kf07_FR9y-hUyazmerZEWgl5uBi7j4
 /**
  * A comprehensive representation of a geographical position in terms of a coordinate with the times accessed, people related, and events involved. Locations of different associated information but identical coordinates are stored as one location object. A search for a location object given the time, person, or event concerned may be conducted. Relevant information of this location such as the zip code and the region are derived. 
  * @author Derek
@@ -40,7 +38,7 @@ public class PhyLocation implements Location
 	/**
 	 * All created locations.
 	 */
-	private static final Map<Coordinate,PhyLocation> locations = new HashMap<Coordinate,PhyLocation>();
+	static final Map<Coordinate,PhyLocation> locations = new HashMap<Coordinate,PhyLocation>();
 	
 	/**
 	 * Create a location in the simplest form--the coordinate and the location.
@@ -58,6 +56,7 @@ public class PhyLocation implements Location
 			tar.times.add(time);
 			return tar;
 		}
+		locations.put(coor,output);
 		return output;
 	}
 	
@@ -214,7 +213,28 @@ public class PhyLocation implements Location
 	
 	private void processLoc() throws IOException
 	{
-		Object[] ret = Interpretor.interpretLoc(coor.getLati(),coor.getLng(),info);
+		Object[] ret = null; 
+		try 
+		{
+			ret = Interpretor.interpretLoc(coor.getLati(),coor.getLng(),info);	
+		}
+		catch(IndexOutOfBoundsException ex)
+		{
+			try
+			{
+				if(Interpretor.keyCount+1>=Interpretor.keys.length)
+					return;
+				Interpretor.key = Interpretor.keys[++Interpretor.keyCount];
+				ret = Interpretor.interpretLoc(coor.getLati(),coor.getLng(),info); 
+			}catch(IndexOutOfBoundsException ex2)
+			{
+				printArray(PhyLocation.locations.values());
+				System.out.println(String.format("Inputed Location Information %d pieces",Interpretor.count));
+				System.out.println(String.format("Outputed Location Objects %d pieces", PhyLocation.locations.size()));
+				System.out.println("Difference is "+(Interpretor.count-PhyLocation.locations.size()));
+				System.out.println(Interpretor.keyCount);
+			}
+		}
 		formatted = (String)ret[0];
 		types = (String[])ret[1];
 		coor.setLati((double)ret[2]);
@@ -224,6 +244,16 @@ public class PhyLocation implements Location
 	public static enum LocationType
 	{
 		STREET_NUM,ROUTE,NEIGHBORHOOD,LOCALITY,ADMINISTRATIVE1,ADMINISTRATIVE2,COUNTRY,POSTAL_CODE
+	}
+	
+	public String toString()
+	{
+		return String.format("Location\nType as %s\n%s\nat Times %s",Arrays.toString(types),formatted,times);
+	}
+	
+	public boolean equals(Object other)
+	{
+		return coor.equals(((PhyLocation)other).coor);
 	}
 	
 	public static void main(String[] args) 

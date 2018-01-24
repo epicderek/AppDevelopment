@@ -2,14 +2,40 @@ package pocket;
 import static pocket.Sub.*;
 import java.util.*;
 
+/**
+ * An abstract location that represents a source in the client's software space.
+ * @author Derek
+ *
+ */
 public class AbsLocation implements Location
 {
+	/**
+	 * Description of this abstract location.
+	 */
 	private Description des;
+	/**
+	 * The exact source represented.
+	 */
 	private String source;
-	private List<Time> times = new ArrayList<Time>();
+	/**
+	 * Times this source is active in generation of data.
+	 */
+	private Set<Time> times = new HashSet<Time>();
+	/**
+	 * The events associated with this abstract location.
+	 */
 	private Map<Event,Integer> events = new HashMap<Event,Integer>();
+	/**
+	 * All the sources that engendered data.
+	 */
 	static final Map<String,AbsLocation> locations = new HashMap<String,AbsLocation>();
 	
+	/**
+	 * An exclusive constructor that does not account for duplicity.
+	 * @param des Description of the source.
+	 * @param time The time the location is occasioned.
+	 * @param eve The events associated with this source.
+	 */
 	private AbsLocation(String des, Time time, Event... eve)
 	{
 		source = des;
@@ -17,6 +43,13 @@ public class AbsLocation implements Location
 		locations.put(source,this);
 	}
 	
+	/**
+	 * Create a source with the name of the source, the time, and the event. If duplicate, information would be updated to the existent source and a reference to that object will be returned.
+	 * @param des Description of the source.
+	 * @param time The time the location is occasioned.
+	 * @param eve The events associated with this source.
+	 * @return The source representing the given informations.
+	 */
 	public static AbsLocation processAbsLocation(String des, Time time, Event... eve)
 	{
 		AbsLocation output;
@@ -31,6 +64,10 @@ public class AbsLocation implements Location
 		return output;
 	}
 	
+	/**
+	 * Append a description to this source that may be later searched.
+	 * @param de The description to be appended.
+	 */
 	public void appendDescription(Description de)
 	{
 		if(des==null)

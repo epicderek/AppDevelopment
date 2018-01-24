@@ -3,30 +3,85 @@ import static pocket.Sub.*;
 import static pocket.PhyLocation.LocationType;
 import static pocket.PhyLocation.LocationType.*;
 import java.util.*;
+import java.util.regex.*;
 import java.io.*;
 import java.net.*;
 import javax.json.*;
 
+/**
+ * A JSON interpreter that interprets specific JSON data from specific apps as well as reverse geocoding and parsing irregular JSON files that contains more than one JSON object. 
+ * The specific apps included are notification, device event, browser search, browser visit, logs, and location, which respectively correspond to Message of Event, Query, Profiles, and PhyLocation.   
+ * @author Derek
+ *
+ */
 public class Interpretor 
 {
+	//The file in consideration and their readers.
+	private File file;
 	private Reader read;
 	private JsonReader reader;
-	private static final String uFirst = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
-	private static final String uSecond = "&key=AIzaSyBP8kf07_FR9y-hUyazmerZEWgl5uBi7j4";
-	
-	public Interpretor(File file) throws FileNotFoundException
+	/**
+	 * The api keys for the google geocoding api.
+	 */
+	static String[] keys;
+	static String key;
+	//The portions of the url for the google api.
+	private static final String uFirst;
+	private static final String uSecond;
+	/**
+	 * The counter that keeps track of the number of keys exausted.
+	 */
+	public static int keyCount;
+	/**
+	 * A counter that tracks the number of 
+	 */
+	public static int count;
+	static
 	{
+		keys = new String[]{"AIzaSyAe67qjsHOQomCNyIIyi_UKm5uqNvTGcvA","AIzaSyDzqYwvSvnHhBAPf0ZisEPCuZWZv2ldry4","AIzaSyDG4Gjp_mW0T25VA17Jmk5pYJRJUFvnbUA","AIzaSyDnPcdlEZyqR6Cr2ite9aAvoTMDzDhty_E","AIzaSyDnfk0csfpKC1G12EUh4BzyuXOoa_B0fKE"};
+		key = keys[0];
+		uFirst = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
+		uSecond = "&key=";
+	}
+	
+	/**
+	 * A constructor reserved for package testing. 
+	 */
+	Interpretor()
+	{
+		
+	}
+	
+	/**
+	 * Instantiate an interpreter with respect to the given JSON file.
+	 * @param file The JSON file to be processed.
+	 * @throws IOException
+	 */
+	public Interpretor(File file) throws IOException
+	{
+		this.file = file;
 		read = new FileReader(file);
 		reader = Json.createReader(read);
 	}
 	
+	/**
+	 * Set the target JSON file of the interpreter and instantiate the necessary readers.
+	 * @param other The file to be processed.
+	 * @throws FileNotFoundException
+	 */
 	public void set(File other) throws FileNotFoundException
 	{
+		file = other;
 		read = new FileReader(other);
 		reader = Json.createReader(read);
 	}
 	
-	public Event[] interpretNote()
+	/**
+	 * Interpret a Notification JSON File and record the data as native objects. As notification may contain messages, the output may be a message, which is a sub-type of event.
+	 * @return An array of events whose quantity directly equals the number of JSON Objects processed.
+	 * @throws IOException
+	 */
+	public Event[] interpretNote() throws IOException
 	{
 		JsonArray arr = reader.readObject().getJsonObject("itemMap").getJsonArray("grouped_items");
 		Event[] eves = new Event[arr.size()];
@@ -34,28 +89,37 @@ public class Interpretor
 		for(JsonValue holder: arr)
 		{
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
+			boolean cat = obj.containsKey("category");
 			StringBuilder builder = new StringBuilder();
-			builder.append(!obj.containsKey("category")?"":obj.getString("category"));
-			boolean isMsg = obj.getString("category").equals("msg");
+			builder.append(!cat?"":obj.getString("category"));
+			boolean isMsg = false;
+			if(cat&&obj.getString("category").equals("msg"))
+				isMsg = true;
 			builder.append(" ");
 			builder.append(obj.getString("action"));
 			builder.append("\n\"");
 			builder.append(obj.containsKey("notification_text")?obj.getString("notification_text"):"");
 			builder.append("\"\nby ");
-			builder.append(obj.getString("notification_title"));
-			builder.append("\nin ");
+			builder.append(obj.containsKey("notification_title")?obj.getString("notification_title"):"");
 			Description des = new Description(builder.toString());
 			Time time = new Time(obj.getInt("time_created"));
 			if(isMsg)
-				eves[counter++] = new Message(time,new Profile(obj.getString("notification_title")),new Profile("User"),obj.getString("notification_text"),AbsLocation.processAbsLocation(obj.getString("package_name"),time));
+			{
+				eves[counter++] = Message.processMessage(time,Profile.processProfile(obj.getString("notification_title")),Profile.processProfile("User"),obj.containsKey("notification_text")?obj.getString("notification_text"):"",AbsLocation.processAbsLocation(obj.getString("package_name"),time));
+			}
 			else
-				eves[counter++] = new Event(time,AbsLocation.processAbsLocation(obj.getString("package_name"),time),des);
+				eves[counter++] = Event.processEvent(time,AbsLocation.processAbsLocation(obj.getString("package_name"),time),des);
 		}
-		reader.close();
+		read.close();
 		return eves;
 	}
 	
-	public Query[] interpretBro()
+	/**
+	 * Interpret a Browser Search JSON File and record the data as Query objects.
+	 * @return An array containing the exact number of Query objects as the number of inputed Browser Search JSON Objects.
+	 * @throws IOException
+	 */
+	public Query[] interpretBro() throws IOException
 	{
 		JsonArray arr = reader.readObject().getJsonObject("itemMap").getJsonArray("grouped_items");
 		Query[] ques = new Query[arr.size()];
@@ -65,14 +129,19 @@ public class Interpretor
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
 			String des = obj.getString("text");
 			Time time = new Time(obj.getInt("time_created"));
-			Query que = new Query(time,des,obj.getString("browser_name"));
+			Query que = Query.processQuery(time,des,obj.getString("browser_name"));
 			ques[counter++] = que;
 		}
-		reader.close();
+		read.close();
 		return ques;
 	}
 	
-	public Query[] interetVis()
+	/**
+	 * Interpret a Browser Visit JSON File and record the data as Query objects with the description of a visit.
+	 * @return An array of Query objects of the exact quantity as the inputed Browser Search JSON Objects.
+	 * @throws IOException
+	 */
+	public Query[] interpretVis() throws IOException
 	{
 		JsonArray arr = reader.readObject().getJsonObject("itemMap").getJsonArray("grouped_items");
 		Query[] ques = new Query[arr.size()];
@@ -84,21 +153,28 @@ public class Interpretor
 			String url = obj.getString("url");
 			String title = obj.getString("title")+(url.equals("Search of type URL")?"":url);
 			String source = obj.getString("package_name");
-			Query que = new Query(time,String.format("Browser Visit\n%s",title),source);
+			Query que = Query.processQuery(time,String.format("Browser Visit\n%s",title),source);
 			ques[counter++] = que;
 		}
+		read.close();
 		return ques;
 	}
 	
-	public Profile[] interpretLog()
+	/**
+	 * Interpret a Logs JSON File and record the data regarding the contact as Profile objects.
+	 * @return An array of Profile Objects that are of the exact number of Contact JSON Objects inputed.
+	 * @throws IOException
+	 */
+	public Profile[] interpretLog() throws IOException
 	{
 		JsonArray arr = reader.readObject().getJsonObject("itemMap").getJsonArray("contact_list");
 		Profile[] pros = new Profile[arr.size()];
 		int counter = 0;
 		for(JsonValue holder: arr)
 		{
+			count++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
-			Profile pro = new Profile(obj.getString("name"));
+			Profile pro = Profile.processProfile(obj.getString("name"));
 			JsonArray ref;
 			if((ref=obj.getJsonArray("phone_numbers")).size()!=0)
 				pro.addDial(ref.getString(0));
@@ -106,10 +182,14 @@ public class Interpretor
 				pro.addEmail(ref.getString(0));
 			pros[counter++] = pro;
 		}
+		read.close();
 		return pros;
 	}
 	
-	
+	/**
+	 * Interpret a Device Event JSON File and record the data as Event objects.
+	 * @return An array of events of the exact number of the inputed Device Event JSON Objects.
+	 */
 	public Event[] interpretDee()
 	{
 		JsonArray arr = reader.readObject().getJsonObject("itemMap").getJsonArray("grouped_items");
@@ -127,9 +207,37 @@ public class Interpretor
 		return eves;
 	}
 	
+	/**
+	 * Interpret a Location JSON File and record the data as PhyLocation objects. 
+	 * @return An array of PhyLocation objects that are of the exact number of inputed Location JSON Objects.
+	 * @throws IOException
+	 */
+	public PhyLocation[] interpretLoc() throws IOException
+	{
+		JsonObject[] objs = parseIrreJsonFile(file);
+		PhyLocation[] locs = new PhyLocation[objs.length];
+		int counter = 0;
+		for(JsonObject holder: objs)
+		{
+			JsonObject obj = holder.getJsonObject("itemMap");
+			Time time = new Time(obj.getInt("time_created"));
+			JsonArray co = obj.getJsonArray("coordinates");
+			locs[counter++] = PhyLocation.getLocation(new Coordinate(co.getJsonNumber(0).doubleValue(),co.getJsonNumber(1).doubleValue(),co.getJsonNumber(2).doubleValue()),time);
+		}
+		return locs;
+	}
+	
+	/**
+	 * A helper method that computes relevant geographic information based on the latitude and longitude given through the google map geocoding api. The results are recorded in the given map whose keys, to be filled by this method along with their proper values, are the enumerated types declared in PhyLocation.
+	 * @param lati The latitude of the location.
+	 * @param lon The longitude of the location.
+	 * @param record The container of searched information.
+	 * @return An object array whose first index is the formatted address, the second the types of this location, third and fourth the adjusted coordinate returned by the google map that comports with the facility located.
+	 * @throws IOException
+	 */
 	public static Object[] interpretLoc(Double lati, Double lon, Map<LocationType,String> record) throws IOException
 	{
-		URL url = new URL(String.format("%s%s,%s%s",uFirst,lati,lon,uSecond));
+		URL url = new URL(String.format("%s%s,%s%s%s",uFirst,lati,lon,uSecond,key));		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 		StringBuilder json = new StringBuilder();
 		String line;
@@ -142,7 +250,6 @@ public class Interpretor
 		JsonReader read = Json.createReader(new StringReader(resp));
 		JsonObject loc = read.readObject().getJsonArray("results").getJsonObject(0);
 		JsonArray add = loc.getJsonArray("address_components");
-		System.out.println(resp);
 		for(JsonValue holder: add)
 		{
 			JsonObject obj = (JsonObject)holder;
@@ -178,9 +285,56 @@ public class Interpretor
 		return output;
 	}
 	
+	/**
+	 * A helper method that parses an irregular JSON File of parallel none-nested JSON Objects into individual JSON Objects, which are subsequently returned. 
+	 * @param text The irregular JSON File to be parsed.
+	 * @return An array of valid JSON Objects. 
+	 * @throws IOException
+	 */
+	public static JsonObject[] parseIrreJsonFile(File text) throws IOException
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(text));
+		int counter1 = 0, counter2 = 0;
+		List<StringReader> reds = new ArrayList<StringReader>();
+		StringBuilder builder = new StringBuilder();
+		String line;
+		Pattern test = Pattern.compile("[\\w{}\\[\\]]");
+		while((line=reader.readLine())!=null)
+		{
+			Matcher mat = test.matcher(line);
+			if(!mat.find())
+				continue;
+			if(line.contains("{"))
+				counter1++;
+			else if(line.contains("}"))
+				counter2++;
+			builder.append(line);
+			if(counter1==counter2)
+			{
+				reds.add(new StringReader(builder.toString()));
+				builder = new StringBuilder();
+				counter1 = 0;
+				counter2 = 0;
+			}
+		}
+		reader.close();
+		JsonObject[] objs = new JsonObject[reds.size()];
+		int counter = 0;
+		for(StringReader holder: reds)
+			objs[counter++] = Json.createReader(holder).readObject();
+		return objs;
+	}
+	
 	public static void main(String[] args) throws IOException 
 	{
-		interpretLoc(40.4618536,-79.9313251,new HashMap<LocationType,String>());
+		interpretLoc(40.441445, -79.925702,new HashMap<LocationType,String>());
+//		File file = new File("C:\\PocketData\\P04\\Location\\Location (1).txt");
+		//printArray(new String(Files.readAllBytes(file.toPath())));
+//		parseIrreJsonFile(file);
+		//printArray("cool");
+//		for(String holder: keys)
+//			System.out.println(holder);
+//		loadKeys();
 	}
 
 }
