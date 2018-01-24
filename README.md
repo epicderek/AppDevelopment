@@ -1,7 +1,4 @@
 # AppDevelopment
-A repository dedicated to the development of POCKET.
-
-  # AppDevelopment
 
  This package is dedicated to the development of Personally Oriented Collective Knowledge through Efficient Tracking offers a preliminary experimentation and implementation of it. The interface collectively parses JSON data for specific applications and automatic storage as native objects.
   The main classes included are AbsLocation, Profile, PhyLocation, Event, Message, Email, Query and Interpretor, in which the six in the middle represent personal data. 
@@ -20,7 +17,7 @@ A repository dedicated to the development of POCKET.
                                                      Difference is 44015.
   This is due to the plausible duplicity in scanning as well as the actual redundant storage which proclaims the promises for POCKET. A standard Profile object printed is of the following format:
                                         Profile of Qirong Ho
-                                        email [qho@andrew.cmu.edu], dial [],
+                                        email [\\\.@gmail.com], dial [],
 where part of the information may be missing.
    A PhyLocation object is a comprehensive representation of a geographical position in terms of a coordinate with the times accessed, people related, and events involved. Locations of different associated information but identical coordinates are stored as one location object. Relevent geographic information is derived by invoking the helper method in reverse geocoding in the Interpretor class. The specific information garnered is contained in a map whose keys are enumerated types in accord with the types in the api, STREET_NUM,ROUTE,NEIGHBORHOOD,LOCALITY,ADMINISTRATIVE1,ADMINISTRATIVE2,COUNTRY,POSTAL_CODE. The PhyLocation object also contains the type of the location in an array of strings.
    A PhyLocation can be created this way.
