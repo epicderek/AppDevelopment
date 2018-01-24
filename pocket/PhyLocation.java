@@ -33,6 +33,9 @@ public class PhyLocation implements Location
 	 * All events associated with this location.
 	 */
 	private Map<Event,Integer> eve = new HashMap<Event,Integer>();
+	/**
+	 * The relevant geographic information correlated with the location, ex. city, zip, etc.
+	 */
 	private Map<LocationType,String> info = new HashMap<LocationType,String>();
 	
 	/**
@@ -94,6 +97,16 @@ public class PhyLocation implements Location
 		}
 		for(Profile holder: pro)
 			part.put(holder,1);
+	}
+	
+	/**
+	 * Return the information of this location concerning the specific type of geographic information demanded, ex. city, according to the enumerated types listed in the LocationType.
+	 * @param type The type of information in LocationType to be inquired.
+	 * @return The corresponding information to the type of informaiton demanded.
+	 */
+	public String getInfo(LocationType type)
+	{
+		return info.get(type);
 	}
 	
 	public void appendDescription(Description other)
