@@ -327,14 +327,7 @@ public class Interpretor
 	
 	public static void main(String[] args) throws IOException 
 	{
-		interpretLoc(40.441445, -79.925702,new HashMap<LocationType,String>());
-//		File file = new File("C:\\PocketData\\P04\\Location\\Location (1).txt");
-		//printArray(new String(Files.readAllBytes(file.toPath())));
-//		parseIrreJsonFile(file);
-		//printArray("cool");
-//		for(String holder: keys)
-//			System.out.println(holder);
-//		loadKeys();
+
 	}
 
 }
