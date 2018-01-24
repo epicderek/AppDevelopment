@@ -33,7 +33,7 @@ public class Interpretor
 	 */
 	public static int keyCount;
 	/**
-	 * A counter that tracks the number of 
+	 * A counter that tracks the pieces of information consumed. 
 	 */
 	public static int count;
 	static
@@ -77,11 +77,20 @@ public class Interpretor
 	}
 	
 	/**
+	 * Reset the static counter to zero.
+	 */
+	public void resetCount()
+	{
+		count = 0;
+	}
+	
+	/**
 	 * Interpret a Notification JSON File and record the data as native objects. As notification may contain messages, the output may be a message, which is a sub-type of event.
+	 * @param Whether to start the static counter. True, false starts the counter for Message; false, true starts the counter for Event.
 	 * @return An array of events whose quantity directly equals the number of JSON Objects processed.
 	 * @throws IOException
 	 */
-	public Event[] interpretNote() throws IOException
+	public Event[] interpretNote(boolean... cou) throws IOException
 	{
 		JsonArray arr = reader.readObject().getJsonObject("itemMap").getJsonArray("grouped_items");
 		Event[] eves = new Event[arr.size()];
@@ -105,10 +114,17 @@ public class Interpretor
 			Time time = new Time(obj.getInt("time_created"));
 			if(isMsg)
 			{
+				if(cou[0])
+					count++;
 				eves[counter++] = Message.processMessage(time,Profile.processProfile(obj.getString("notification_title")),Profile.processProfile("User"),obj.containsKey("notification_text")?obj.getString("notification_text"):"",AbsLocation.processAbsLocation(obj.getString("package_name"),time));
 			}
 			else
+			{
+				if(cou[1])
+					count++;
 				eves[counter++] = Event.processEvent(time,AbsLocation.processAbsLocation(obj.getString("package_name"),time),des);
+				
+			}
 		}
 		read.close();
 		return eves;
@@ -116,16 +132,19 @@ public class Interpretor
 	
 	/**
 	 * Interpret a Browser Search JSON File and record the data as Query objects.
+	 * @param cou Whether to start the static counter.
 	 * @return An array containing the exact number of Query objects as the number of inputed Browser Search JSON Objects.
 	 * @throws IOException
 	 */
-	public Query[] interpretBro() throws IOException
+	public Query[] interpretBro(boolean... cou) throws IOException
 	{
 		JsonArray arr = reader.readObject().getJsonObject("itemMap").getJsonArray("grouped_items");
 		Query[] ques = new Query[arr.size()];
 		int counter = 0;
 		for(JsonValue holder: arr)
 		{
+			if(cou[0])
+				count++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
 			String des = obj.getString("text");
 			Time time = new Time(obj.getInt("time_created"));
@@ -138,16 +157,19 @@ public class Interpretor
 	
 	/**
 	 * Interpret a Browser Visit JSON File and record the data as Query objects with the description of a visit.
+	 * @param 
 	 * @return An array of Query objects of the exact quantity as the inputed Browser Search JSON Objects.
 	 * @throws IOException
 	 */
-	public Query[] interpretVis() throws IOException
+	public Query[] interpretVis(boolean... cou) throws IOException
 	{
 		JsonArray arr = reader.readObject().getJsonObject("itemMap").getJsonArray("grouped_items");
 		Query[] ques = new Query[arr.size()];
 		int counter = 0;
 		for(JsonValue holder: arr)
 		{
+			if(cou[0])
+				count++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
 			Time time = new Time(obj.getInt("time_created"));
 			String url = obj.getString("url");
@@ -162,17 +184,19 @@ public class Interpretor
 	
 	/**
 	 * Interpret a Logs JSON File and record the data regarding the contact as Profile objects.
+	 * @param Whether to start the static counter.
 	 * @return An array of Profile Objects that are of the exact number of Contact JSON Objects inputed.
 	 * @throws IOException
 	 */
-	public Profile[] interpretLog() throws IOException
+	public Profile[] interpretLog(boolean... cou) throws IOException
 	{
 		JsonArray arr = reader.readObject().getJsonObject("itemMap").getJsonArray("contact_list");
 		Profile[] pros = new Profile[arr.size()];
 		int counter = 0;
 		for(JsonValue holder: arr)
 		{
-			count++;
+			if(cou[0])
+				count++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
 			Profile pro = Profile.processProfile(obj.getString("name"));
 			JsonArray ref;
@@ -188,15 +212,18 @@ public class Interpretor
 	
 	/**
 	 * Interpret a Device Event JSON File and record the data as Event objects.
+	 * @param Whether to start the static counter.
 	 * @return An array of events of the exact number of the inputed Device Event JSON Objects.
 	 */
-	public Event[] interpretDee()
+	public Event[] interpretDee(boolean... cou)
 	{
 		JsonArray arr = reader.readObject().getJsonObject("itemMap").getJsonArray("grouped_items");
 		Event[] eves = new Event[arr.size()];
 		int counter = 0;
 		for(JsonValue holder: arr)
 		{
+			if(cou[0])
+				count++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
 			Time time = new Time(obj.getInt("time_created"));
 			Description des = new Description(String.format("%s, %s",obj.getString("type"),obj.getString("event")));
@@ -208,17 +235,20 @@ public class Interpretor
 	}
 	
 	/**
-	 * Interpret a Location JSON File and record the data as PhyLocation objects. 
+	 * Interpret a Location JSON File and record the data as PhyLocation objects.
+	 * @param Whether to start the static counter. 
 	 * @return An array of PhyLocation objects that are of the exact number of inputed Location JSON Objects.
 	 * @throws IOException
 	 */
-	public PhyLocation[] interpretLoc() throws IOException
+	public PhyLocation[] interpretLoc(boolean... cou) throws IOException
 	{
 		JsonObject[] objs = parseIrreJsonFile(file);
 		PhyLocation[] locs = new PhyLocation[objs.length];
 		int counter = 0;
 		for(JsonObject holder: objs)
 		{
+			if(cou[0])
+				count++;
 			JsonObject obj = holder.getJsonObject("itemMap");
 			Time time = new Time(obj.getInt("time_created"));
 			JsonArray co = obj.getJsonArray("coordinates");
