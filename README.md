@@ -106,17 +106,17 @@ And to reset the interpreter to target a different file, do this.
 	
 The mode of interpretation has to be chosen manually in accord with the file to be processed. For example, to process a Notification file, do this.
 	
-	     Event[] eve = inte.processNote();
+	         Event[] eve = inte.processNote();
 	
 To start the static counter, which keeps track of the number of pieces of information consumed, do this.
 
-     Profile[] pros = inte.processLog(true);
+                 Profile[] pros = inte.processLog(true);
 
 The counter needs to be resetted at the desired time, possibly after running a specific type of files. Also, the above assumes the file is being resetted correctly to a Log file. 
 
 The method returns an array of possibly duplicated Event and Message objects; nevertheless, unless specially interested, all the objects are processed are stored automatically into each class. Such, to access the Message objects generated, adopt this syntax.
      
-    Collection<Message> = Message.mess.values();
+                 Collection<Message> = Message.mess.values();
 
 
 	
