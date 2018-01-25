@@ -81,14 +81,14 @@ They be instantiated as such.
 According to the statistics of Message objects of a user per day,
 
                                   Inputed Message Information 150 pieces
-                                 Outputed Message Objects 150 pieces
-                                                     Difference is 0,
+                                   Outputed Message Objects 150 pieces
+                                              Difference is 0,
 of which a standard printed version adopts the form of
 
-			Message from Steven Dang to User
-at Time 970097405
-in com.Slack
-of "where di u heara bout it?".
+			            Message from Steven Dang to User
+                                    at Time 970097405
+                                    in com.Slack
+                                    of "where di u heara bout it?".
 
 Note that in the creation of Message objects, Profile Objects are created to accommodate the people involved.
 
