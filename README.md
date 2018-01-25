@@ -44,7 +44,7 @@ The Coordinate are the longitude and latitude of the location, and time is when 
 
 The specific information of a location may be inquired by invoking the method getInfo(LocationType type). For example, if we were to inquire of the zip-code of a location, we make the call as such.
 
-       String zip = loc.getInfo(LocationType.ZIP);
+                    String zip = loc.getInfo(LocationType.ZIP);
 
 According to a statistics of the record of locations a user occasions at instants in a day and their resultant storage as Profile Objects, it is shown that
 
