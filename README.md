@@ -1,6 +1,6 @@
 # AppDevelopment
 
-This package is dedicated to the development of Personally Oriented Collective Knowledge through Efficient Tracking offers a preliminary experimentation and implementation of it. The interface collectively parses JSON data for specific applications and automatic storage as native objects. This description includes statistics and analysis of the parsing of personal information and storage as native objects. 
+This package, dedicated to the development of Personally Oriented Collective Knowledge through Efficient Tracking, offers a preliminary experimentation and implementation of it. The interface collectively parses JSON data for specific applications and automatic storage as native objects. This description includes statistics and analysis of the parsing of personal information and storage as native objects. 
  
 The main classes included are AbsLocation, Profile, PhyLocation, Event, Message, Email, Query and Interpreter, in which the six in the middle represent personal data. 
 
