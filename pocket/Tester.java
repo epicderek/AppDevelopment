@@ -4,14 +4,17 @@ import java.util.*;
 import java.io.*;
 import java.nio.file.*;
 
-
-
 public class Tester 
 {
 
+	/**
+	 * Run the Location files.
+	 * @param pat The path of the file folder.
+	 * @throws IOException
+	 */
 	public static void runLoc(Path pat) throws IOException
 	{
-		PrintWriter write = new PrintWriter("LocationStatistics(1).csv");
+		PrintWriter write = new PrintWriter("LocationStatistics(4).csv");
 		File[] files = pat.toFile().listFiles();
 		Interpretor inte = new Interpretor();
 		for(File holder: files)
@@ -29,6 +32,11 @@ public class Tester
 		write.close();
 	}
 	
+	/**
+	 * Run the Notification or Device Event files.
+	 * @param pat The path of the folder containing the files.
+	 * @throws IOException
+	 */
 	public static void runEvent(Path pat) throws IOException
 	{
 		File[] files = pat.toFile().listFiles();
@@ -44,12 +52,18 @@ public class Tester
 		PrintWriter wri = new PrintWriter("EventStatistics.csv");
 		wri.write(String.format("%s,%s,%s%s","Description","Time","Source","\n"));
 		for(Event holder: Event.eves.values())
-			wri.write(String.format("%s,%s,%s%s",holder.getDescription(),holder.getTime(),holder.getLocation(),"\n"));
+			wri.write(String.format("%s,%s,%s%s",holder.des.toString().replaceAll("\n",""),holder.getTime(),((AbsLocation)holder.getLocation()).getSource(),"\n"));
 		System.out.println(String.format("Inputed Event Information %d pieces",Interpretor.count));
 		System.out.println(String.format("Outputed Event Objects %d pieces", Event.eves.size()));
 		System.out.println("Difference is "+(Interpretor.count-Event.eves.size()));
 		wri.close();
 	}
+	
+	/**
+	 * Run the Message files.
+	 * @param pat The path of the files.
+	 * @throws IOException
+	 */
 	public static void runMess(Path pat) throws IOException
 	{
 		File[] files = pat.toFile().listFiles();
@@ -69,6 +83,11 @@ public class Tester
 		wri.close();
 	}
 	
+	/**
+	 * Run the Contact files.
+	 * @param path The path of the files.
+	 * @throws IOException
+	 */
 	public static void runLog(Path path) throws IOException
 	{
 		File[] files = path.toFile().listFiles();
@@ -88,6 +107,11 @@ public class Tester
 		wri.close();
 	}
 	
+	/**
+	 * Run the browser search and browser query files.
+	 * @param pat The path of the files.
+	 * @throws IOException
+	 */
 	public static void runBro(Path pat) throws IOException
 	{
 		File[] files = pat.toFile().listFiles();
@@ -112,8 +136,7 @@ public class Tester
 	
 	public static void main(String[] args) throws IOException 
 	{
-		runLoc(Paths.get("C:\\PocketData\\P04\\Location"));
-//		runEvent(Paths.get("C:\\PocketData\\P00\\DeviceEvent"));
+		
 	}
 
 }
