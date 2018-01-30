@@ -28,7 +28,7 @@ public class AbsLocation implements Location
 	/**
 	 * All the sources that engendered data.
 	 */
-	static final Map<String,AbsLocation> locations = new HashMap<String,AbsLocation>();
+	static final Map<String,AbsLocation> locations = new TreeMap<String,AbsLocation>();
 	
 	/**
 	 * An exclusive constructor that does not account for duplicity.
@@ -91,6 +91,16 @@ public class AbsLocation implements Location
 	public String getSource()
 	{
 		return source;
+	}
+	
+	public Description getDescription()
+	{
+		return des;
+	}
+	
+	public Collection<Time> getTimes()
+	{
+		return times;
 	}
 	
 	public String toString()

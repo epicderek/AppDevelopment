@@ -14,10 +14,6 @@ public class Query extends Event
 	 */
 	private String que;
 	/**
-	 * The source of the query, tyhe website.
-	 */
-	private AbsLocation source;
-	/**
 	 * All the query objects created.
 	 */
 	static Map<Query,Query> ques = new HashMap<Query,Query>();
@@ -32,7 +28,7 @@ public class Query extends Event
 	{
 		super(time);
 		que = query;
-		source = AbsLocation.processAbsLocation(sor, time);
+		loc = AbsLocation.processAbsLocation(sor, time);
 	}
 	
 	/**
@@ -53,7 +49,7 @@ public class Query extends Event
 	
 	public AbsLocation getSource()
 	{
-		return source;
+		return (AbsLocation)loc;
 	}
 	
 	public String getQuery()
@@ -63,7 +59,7 @@ public class Query extends Event
 	
 	public String toString()
 	{
-		return String.format("Query at time %s\nin %s\nof: %s",time,source,que);
+		return String.format("Query at time %s\nin %s\nof: %s",time,loc,que);
 	}
 	
 	public boolean equals(Object other)

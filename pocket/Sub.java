@@ -8,26 +8,37 @@ import java.util.*;
  */
 public class Sub 
 {
-	public static class Time
+	
+	public static class Time implements Comparable<Time>
 	{
+		public final Date date;
 		private final long time;
 		private final long timeOp;
 		
 		public Time(long time)
 		{
 			this.time = time;
+			date = new Date(time);
 			timeOp = 0;
 		}
 		
 		public Time(long time1, long time2)
 		{
 			time = time1;
+			date = new Date(time);
 			timeOp = time2;
 		}
 		
 		public long[] getTime()
 		{
 			return new long[]{time,timeOp};
+		}
+		
+		public int compareTo(Time other)
+		{
+			if(time==other.time)
+				return 0;
+			return time<other.time?-1:1;
 		}
 		
 		public String toString()

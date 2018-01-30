@@ -36,7 +36,7 @@ public class Profile
 	/**
 	 * All the existent profiles.
 	 */
-	static final Map<String,Profile> pros = new HashMap<String,Profile>();
+	static final Map<String,Profile> pros = new TreeMap<String,Profile>();
 	
 	/**
 	 * A reserved constructor for quick instantiation with the minimum information.

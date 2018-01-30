@@ -35,7 +35,7 @@ public class Interpretor
 	/**
 	 * A counter that tracks the pieces of information consumed. 
 	 */
-	public static int count;
+	public static int countM,countN,countQ,countE,countP,countL,countI;
 	static
 	{
 		keys = new String[]{"AIzaSyAe67qjsHOQomCNyIIyi_UKm5uqNvTGcvA","AIzaSyDzqYwvSvnHhBAPf0ZisEPCuZWZv2ldry4","AIzaSyDG4Gjp_mW0T25VA17Jmk5pYJRJUFvnbUA","AIzaSyDnPcdlEZyqR6Cr2ite9aAvoTMDzDhty_E","AIzaSyDnfk0csfpKC1G12EUh4BzyuXOoa_B0fKE","AIzaSyAKgyXpQaKd_-UXVuO-qsQ4mW9f5ZXfXmUg"};
@@ -77,11 +77,11 @@ public class Interpretor
 	}
 	
 	/**
-	 * Reset the static counter to zero.
+	 * Reset the static counters to zero.
 	 */
 	public void resetCount()
 	{
-		count = 0;
+		countM = 0; countN = 0; countE = 0; countQ = 0; countP = 0; countL = 0; countI = 0;
 	}
 	
 	/**
@@ -111,17 +111,17 @@ public class Interpretor
 			builder.append("\"\nby ");
 			builder.append(obj.containsKey("notification_title")?obj.getString("notification_title"):"");
 			Description des = new Description(builder.toString());
-			Time time = new Time(obj.getInt("time_created"));
+			Time time = new Time(obj.getInt("timestamp"));
 			if(isMsg)
 			{
 				if(cou[0])
-					count++;
+					countM++;
 				eves[counter++] = Message.processMessage(time,Profile.processProfile(obj.getString("notification_title")),Profile.processProfile("User"),obj.containsKey("notification_text")?obj.getString("notification_text"):"",AbsLocation.processAbsLocation(obj.getString("package_name"),time));
 			}
 			else
 			{
 				if(cou[1])
-					count++;
+					countN++;
 				eves[counter++] = Event.processEvent(time,AbsLocation.processAbsLocation(obj.getString("package_name"),time),des);
 				
 			}
@@ -144,10 +144,10 @@ public class Interpretor
 		for(JsonValue holder: arr)
 		{
 			if(cou[0])
-				count++;
+				countQ++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
 			String des = obj.getString("text");
-			Time time = new Time(obj.getInt("time_created"));
+			Time time = new Time(obj.getInt("timestamp"));
 			Query que = Query.processQuery(time,des,obj.getString("browser_name"));
 			ques[counter++] = que;
 		}
@@ -169,13 +169,14 @@ public class Interpretor
 		for(JsonValue holder: arr)
 		{
 			if(cou[0])
-				count++;
+				countQ++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
-			Time time = new Time(obj.getInt("time_created"));
+			Time time = new Time(obj.getInt("timestamp"));
 			String url = obj.getString("url");
 			String title = obj.getString("title")+(url.equals("Search of type URL")?"":url);
 			String source = obj.getString("package_name");
 			Query que = Query.processQuery(time,String.format("Browser Visit\n%s",title),source);
+			System.out.println(que);
 			ques[counter++] = que;
 		}
 		read.close();
@@ -196,7 +197,7 @@ public class Interpretor
 		for(JsonValue holder: arr)
 		{
 			if(cou[0])
-				count++;
+				countP++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
 			Profile pro = Profile.processProfile(obj.getString("name"));
 			JsonArray ref;
@@ -223,9 +224,9 @@ public class Interpretor
 		for(JsonValue holder: arr)
 		{
 			if(cou[0])
-				count++;
+				countE++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
-			Time time = new Time(obj.getInt("time_created"));
+			Time time = new Time(obj.getInt("timestamp"));
 			Description des = new Description(String.format("%s, %s",obj.getString("type"),obj.getString("event")));
 			Location loc = AbsLocation.processAbsLocation("Device",time);
 			Event eve = new Event(time,loc,des);
@@ -248,9 +249,9 @@ public class Interpretor
 		for(JsonObject holder: objs)
 		{
 			if(cou[0])
-				count++;
+				countL++;
 			JsonObject obj = holder.getJsonObject("itemMap");
-			Time time = new Time(obj.getInt("time_created"));
+			Time time = new Time(obj.getInt("timestamp"));
 			JsonArray co = obj.getJsonArray("coordinates");
 			locs[counter++] = PhyLocation.getLocation(new Coordinate(co.getJsonNumber(0).doubleValue(),co.getJsonNumber(1).doubleValue(),co.getJsonNumber(2).doubleValue()),time);
 		}

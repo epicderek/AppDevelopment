@@ -16,6 +16,16 @@ public class Event
 	static final Map<Event,Event> eves = new HashMap<Event,Event>();
 	
 	/**
+	 * A comparator that compares based on time chronologically.
+	 */
+	static final Comparator<Event> comp = new Comparator<Event>()
+			{
+				public int compare(Event one, Event two)
+				{
+					return one.time.compareTo(two.time);
+				}
+			};
+	/**
 	 * Create an event as according to the description, the specific time, the location, and the possible affiliates. 
 	 * @param time The time of this event. 
 	 * @param loc The location this event advented, either a physical location or an abstract location of an app. 
@@ -119,7 +129,7 @@ public class Event
 	
 	public String toString()
 	{
-		return String.format("Event: %s\nat time %s\nin %s\nof participants %s",des,time,loc,part);
+		return String.format("Event: %s\nin %s\nof participants %s",des,loc,part);
 	}
 	
 	public int hashCode()

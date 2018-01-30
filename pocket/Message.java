@@ -10,10 +10,6 @@ import java.util.*;
 public class Message extends Event
 {
 	/**
-	 * The source of this message.
-	 */
-	private AbsLocation source;
-	/**
 	 * The sender of the message.
 	 */
 	private Profile from;
@@ -41,11 +37,10 @@ public class Message extends Event
 	protected Message(Time time, Profile from, Profile to, String cont, AbsLocation loc)
 	{
 		super(time);
-		source = loc;
+		this.loc = loc;
 		this.from = from;
 		this.to = to;
 		this.cont = cont;
-		loc = source;
 		des = new Description(this.toString());
 	}
 	
@@ -96,12 +91,12 @@ public class Message extends Event
 	
 	public AbsLocation getSource()
 	{
-		return source;
+		return (AbsLocation)loc;
 	}
 	
 	public String toString()
 	{
-		return String.format("Message from %s to %s\nat %s\nin %s\nof \"%s\"",from.getName()+(from.getDial()==null?"":from.getDial()),to.getName()+(to.getDial()==null?"":to.getDial()),time,source.getSource(),cont);
+		return String.format("Message from %s to %s\nat %s\nin %s\nof \"%s\"",from.getName()+(from.getDial()==null?"":from.getDial()),to.getName()+(to.getDial()==null?"":to.getDial()),time,getSource(),cont);
 	}
 	
 	public int hashCode()

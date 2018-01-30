@@ -37,7 +37,6 @@ public class PhyLocation implements Location
 	 * The relevant geographic information correlated with the location, ex. city, zip, etc.
 	 */
 	private Map<LocationType,String> info = new HashMap<LocationType,String>();
-	
 	/**
 	 * All created locations.
 	 */
@@ -224,6 +223,11 @@ public class PhyLocation implements Location
 		}
 	}
 	
+	public Collection<Time> getTimes()
+	{
+		return times;
+	}
+	
 	private void processLoc() throws IOException
 	{
 		Object[] ret = null; 
@@ -242,9 +246,9 @@ public class PhyLocation implements Location
 			}catch(IndexOutOfBoundsException ex2)
 			{
 				printArray(PhyLocation.locations.values());
-				System.out.println(String.format("Inputed Location Information %d pieces",Interpretor.count));
+				System.out.println(String.format("Inputed Location Information %d pieces",Interpretor.countL));
 				System.out.println(String.format("Outputed Location Objects %d pieces", PhyLocation.locations.size()));
-				System.out.println("Difference is "+(Interpretor.count-PhyLocation.locations.size()));
+				System.out.println("Difference is "+(Interpretor.countL-PhyLocation.locations.size()));
 				System.out.println(Interpretor.keyCount);
 			}
 		}
