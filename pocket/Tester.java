@@ -5,6 +5,11 @@ import java.util.*;
 import java.io.*;
 import java.nio.file.*;
 
+/**
+ * A tester that provides convenient testing for processing specific package of files contained in corresponding folders.
+ * @author Derek
+ *
+ */
 public class Tester 
 {
 
@@ -94,6 +99,11 @@ public class Tester
 		}
 	}
 	
+	/**
+	 * Process all personal data contained in the given folder the path points to, store as native objects, and output as a csv file containing the statistics. Consult the readme for statistics for the structure of the statistcis.
+	 * @param pat The path the folder of personal data contained in separate folders of names Log, DeviceEvent, Browser, Location, Notification, in which the according JSON files are contained.
+	 * @throws IOException
+	 */
 	@SuppressWarnings("deprecation")
 	public static void runFile(Path pat) throws IOException
 	{
@@ -110,7 +120,7 @@ public class Tester
 			else if(holder.getName().contains("Browser"))
 				runBro(holder);
 			else if(holder.getName().contains("Location"))
-				System.out.println();
+				runLoc(holder);
 		wri.write(String.format("Inputted Profile Information %d pieces%s",Interpretor.countP,"\n"));
 		wri.write(String.format("Inputted Message Information %d pieces%s",Interpretor.countM,"\n"));
 		wri.write(String.format("Inputted Notification Information %d pieces%s",Interpretor.countN,"\n"));
@@ -147,8 +157,7 @@ public class Tester
 			Date two = mess.get(i-1).getTime().date;
 			if(one.getDate()==two.getDate()&&one.getMonth()==two.getMonth()&&one.getYear()==two.getYear())
 				continue;
-			else
-				counter++;
+			counter++;
 		}
 		wri.write(String.valueOf(mess.size()/counter));
 		wri.write(" per day\n");
@@ -167,8 +176,7 @@ public class Tester
 			Date two = eves.get(i-1).getTime().date;
 			if(one.getDate()==two.getDate()&&one.getMonth()==two.getMonth()&&one.getYear()==two.getYear())
 				continue;
-			else
-				counter++;
+			counter++;
 		}
 		wri.write(String.valueOf(eves.size()/counter));
 		wri.write(" per day\n");
@@ -187,22 +195,41 @@ public class Tester
 			Date two = ques.get(i-1).getTime().date;
 			if(one.getDate()==two.getDate()&&one.getMonth()==two.getMonth()&&one.getYear()==two.getYear())
 				continue;
-			else
-				counter++;
+			counter++;
 		}
 		wri.write(String.valueOf(ques.size()/counter));
 		wri.write(" per day\n");
 		wri.write("\n\n");
+		List<Time> times = new ArrayList<Time>();
+		counter = 0;
 		wri.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s%s",STREET_NUM,ROUTE,NEIGHBORHOOD,LOCALITY,ADMINISTRATIVE1,ADMINISTRATIVE2,COUNTRY,POSTAL_CODE,"Facility Type","\n"));
 		for(PhyLocation holder: PhyLocation.locations.values())
+		{
 			wri.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s%s",holder.getInfo(STREET_NUM),holder.getInfo(ROUTE),holder.getInfo(NEIGHBORHOOD),holder.getInfo(LOCALITY),holder.getInfo(ADMINISTRATIVE1),holder.getInfo(ADMINISTRATIVE2),holder.getInfo(COUNTRY),holder.getInfo(POSTAL_CODE),Arrays.toString(holder.getTypes()),"\n"));
+			counter+=holder.getTimes().size();
+			times.addAll(holder.getTimes());
+		}
+		Collections.sort(times);
+		int counter2 = 1;
+		for(int i=1; i<times.size(); i++)
+		{
+			Date one = times.get(i-1).date;
+			Date two = times.get(i).date;
+			if(one.getDate()==two.getDate()&&one.getMonth()==two.getMonth()&&one.getYear()==two.getYear())
+				continue;
+			counter2++;
+		}
+		wri.write(String.valueOf(counter/counter2));
+		wri.write(" pieces of advented per day\n");
+		wri.write(String.valueOf(PhyLocation.locations.size()/counter2));
+		wri.write(" native objects per day\n");
 		wri.write("\n\n");
 		wri.close();
 	}
 	
 	public static void main(String[] args) throws IOException 
 	{
-		runFile(Paths.get("C:\\PocketData\\P00"));
+		
 	}
 
 }

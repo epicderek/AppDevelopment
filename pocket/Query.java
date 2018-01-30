@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * An Internet Query that contains the content of the query and the source, the url.
- * @author Maggie
+ * @author Derek
  *
  */
 public class Query extends Event

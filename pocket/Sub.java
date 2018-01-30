@@ -3,7 +3,7 @@ import java.util.*;
 
 /**
  * An assembly of weaker and component classes of the larger classes.
- * @author Maggie
+ * @author Derek
  *
  */
 public class Sub 

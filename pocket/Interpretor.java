@@ -176,7 +176,6 @@ public class Interpretor
 			String title = obj.getString("title")+(url.equals("Search of type URL")?"":url);
 			String source = obj.getString("package_name");
 			Query que = Query.processQuery(time,String.format("Browser Visit\n%s",title),source);
-			System.out.println(que);
 			ques[counter++] = que;
 		}
 		read.close();

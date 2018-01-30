@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * A comprehensive representation of a person as a contact. 
- * @author Maggie
+ * @author Derek
  *
  */
 public class Profile 

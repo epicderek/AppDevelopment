@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * A basic representation of an email, with the time, the affiliates, the content, and the source.
- * @author Maggie
+ * @author Derek
  *
  */
 public class Email extends Message
