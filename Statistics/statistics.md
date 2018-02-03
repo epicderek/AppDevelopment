@@ -1,6 +1,6 @@
 Readme for POCKET Statistics
 
-At the header of each document, the overall statistics is listed. The statistics includes the inputted JSON Objects corresponding to the types Contact (Profile), Message, Notification, Device Event, Browser Visit or Search, Location; and subsequently, the correspondent to native Objects Profile, AbsLocation (sources), Message, Event, Query, PhyLocation.  
+At the header of each document, the overall statistics is listed. The statistics includes the inputted JSON Objects corresponding to the types Contact (Profile), Message, Notification, Device Event, Browser Visit or Search, Location; and subsequently, the correspondents to native Objects Profile, AbsLocation (sources), Message, Event, Query, PhyLocation.  
 An example follows as such:
 
 Inputted Profile Information 7025 pieces
