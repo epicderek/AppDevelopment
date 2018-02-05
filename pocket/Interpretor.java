@@ -358,8 +358,7 @@ public class Interpretor
 	
 	public static void main(String[] args) throws IOException 
 	{
-		Date dt = new Date((int)(1490704728343L));
-		System.out.println(dt);
+		
 	}
 
 }
