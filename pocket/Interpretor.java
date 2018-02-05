@@ -35,11 +35,12 @@ public class Interpretor
 	/**
 	 * A counter that tracks the pieces of information consumed. 
 	 */
-	public static int countM,countN,countQ,countE,countP,countL,countI;
+	public int countM,countN,countQ,countE,countP,countL,countI;
 	static
 	{
-		keys = new String[]{"AIzaSyAe67qjsHOQomCNyIIyi_UKm5uqNvTGcvA","AIzaSyDzqYwvSvnHhBAPf0ZisEPCuZWZv2ldry4","AIzaSyDG4Gjp_mW0T25VA17Jmk5pYJRJUFvnbUA","AIzaSyDnPcdlEZyqR6Cr2ite9aAvoTMDzDhty_E","AIzaSyDnfk0csfpKC1G12EUh4BzyuXOoa_B0fKE","AIzaSyAKgyXpQaKd_-UXVuO-qsQ4mW9f5ZXfXmUg"};
-		key = keys[0];
+		keys = new String[]{"AIzaSyAe67qjsHOQomCNyIIyi_UKm5uqNvTGcvA","AIzaSyDzqYwvSvnHhBAPf0ZisEPCuZWZv2ldry4","AIzaSyDG4Gjp_mW0T25VA17Jmk5pYJRJUFvnbUA","AIzaSyDnPcdlEZyqR6Cr2ite9aAvoTMDzDhty_E","AIzaSyDnfk0csfpKC1G12EUh4BzyuXOoa_B0fKE","AIzaSyCZ-htBGcdRL3edgKX3XIHbvcH52Z-ITIk","AIzaSyCmhv5_zalf68jlqsdeZAbwJxzsbCy7U4k","AIzaSyC7_s8YWKxnaKqswFBp7riTccHxNI3EBoA","AIzaSyCmhv5_zalf68jlqsdeZAbwJxzsbCy7U4k","AIzaSyC-a4AUdyCipXHFev5hopOUz_Mo0QVg2Tk"};
+		key = keys[5];
+		keyCount = 5;
 		uFirst = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
 		uSecond = "&key=";
 	}
@@ -111,7 +112,7 @@ public class Interpretor
 			builder.append("\"\nby ");
 			builder.append(obj.containsKey("notification_title")?obj.getString("notification_title"):"");
 			Description des = new Description(builder.toString());
-			Time time = new Time(obj.getInt("timestamp"));
+			Time time = new Time(obj.getJsonNumber("timestamp").longValue());
 			if(isMsg)
 			{
 				if(cou[0])
@@ -147,7 +148,7 @@ public class Interpretor
 				countQ++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
 			String des = obj.getString("text");
-			Time time = new Time(obj.getInt("timestamp"));
+			Time time = new Time(obj.getJsonNumber("timestamp").longValue());
 			Query que = Query.processQuery(time,des,obj.getString("browser_name"));
 			ques[counter++] = que;
 		}
@@ -171,7 +172,7 @@ public class Interpretor
 			if(cou[0])
 				countQ++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
-			Time time = new Time(obj.getInt("timestamp"));
+			Time time = new Time(obj.getJsonNumber("timestamp").longValue());
 			String url = obj.getString("url");
 			String title = obj.getString("title")+(url.equals("Search of type URL")?"":url);
 			String source = obj.getString("package_name");
@@ -225,7 +226,7 @@ public class Interpretor
 			if(cou[0])
 				countE++;
 			JsonObject obj = ((JsonObject)holder).getJsonObject("itemMap");
-			Time time = new Time(obj.getInt("timestamp"));
+			Time time = new Time(obj.getJsonNumber("timestamp").longValue());
 			Description des = new Description(String.format("%s, %s",obj.getString("type"),obj.getString("event")));
 			Location loc = AbsLocation.processAbsLocation("Device",time);
 			Event eve = new Event(time,loc,des);
@@ -250,7 +251,7 @@ public class Interpretor
 			if(cou[0])
 				countL++;
 			JsonObject obj = holder.getJsonObject("itemMap");
-			Time time = new Time(obj.getInt("timestamp"));
+			Time time = new Time(obj.getJsonNumber("timestamp").longValue());
 			JsonArray co = obj.getJsonArray("coordinates");
 			locs[counter++] = PhyLocation.getLocation(new Coordinate(co.getJsonNumber(0).doubleValue(),co.getJsonNumber(1).doubleValue(),co.getJsonNumber(2).doubleValue()),time);
 		}
@@ -357,7 +358,8 @@ public class Interpretor
 	
 	public static void main(String[] args) throws IOException 
 	{
-
+		Date dt = new Date((int)(1490704728343L));
+		System.out.println(dt);
 	}
 
 }

@@ -246,9 +246,7 @@ public class PhyLocation implements Location
 			}catch(IndexOutOfBoundsException ex2)
 			{
 				printArray(PhyLocation.locations.values());
-				System.out.println(String.format("Inputed Location Information %d pieces",Interpretor.countL));
-				System.out.println(String.format("Outputed Location Objects %d pieces", PhyLocation.locations.size()));
-				System.out.println("Difference is "+(Interpretor.countL-PhyLocation.locations.size()));
+				System.out.println("Key Error");
 				System.out.println(Interpretor.keyCount);
 			}
 		}

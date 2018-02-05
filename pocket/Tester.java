@@ -15,13 +15,12 @@ public class Tester
 
 	/**
 	 * Run the Location files.
-	 * @param pat The path of the file folder.
+	 * @param fol The file folder for Location files.
 	 * @throws IOException
 	 */
-	public static void runLoc(File fol) throws IOException
+	public static void runLoc(File fol, Interpretor inte) throws IOException
 	{
 		File[] files = fol.listFiles();
-		Interpretor inte = new Interpretor();
 		for(File holder: files)
 		{
 			inte.set(holder);
@@ -31,13 +30,12 @@ public class Tester
 	
 	/**
 	 * Run the Notification or Device Event files.
-	 * @param pat The path of the folder containing the files.
+	 * @param fol The folder of the Notification files.
 	 * @throws IOException
 	 */
-	public static void runNote(File fol) throws IOException
+	public static void runNote(File fol, Interpretor inte) throws IOException
 	{
 		File[] files = fol.listFiles();
-		Interpretor inte = new Interpretor();
 		for(File holder: files)
 		{
 			inte.set(holder);
@@ -50,13 +48,12 @@ public class Tester
 	
 	/**
 	 * Run the Message files.
-	 * @param pat The path of the files.
+	 * @param fol The folder of the Notification files.
 	 * @throws IOException
 	 */
-	public static void runMess(File fol) throws IOException
+	public static void runMess(File fol, Interpretor inte) throws IOException
 	{
 		File[] files = fol.listFiles();
-		Interpretor inte = new Interpretor();
 		for(File holder: files)
 		{
 			inte.set(holder);
@@ -66,13 +63,12 @@ public class Tester
 	
 	/**
 	 * Run the Contact files.
-	 * @param path The path of the files.
+	 * @param fol The folder of the Log files.
 	 * @throws IOException
 	 */
-	public static void runLog(File fol) throws IOException
+	public static void runLog(File fol, Interpretor inte) throws IOException
 	{
 		File[] files = fol.listFiles();
-		Interpretor inte = new Interpretor();
 		for(File holder: files)
 		{
 			inte.set(holder);
@@ -82,13 +78,12 @@ public class Tester
 	
 	/**
 	 * Run the browser search and browser query files.
-	 * @param pat The path of the files.
+	 * @param fol The folder of the browser search and browser visits files.
 	 * @throws IOException
 	 */
-	public static void runBro(File fol) throws IOException
+	public static void runBro(File fol, Interpretor inte) throws IOException
 	{
 		File[] files = fol.listFiles();
-		Interpretor inte = new Interpretor();
 		for(File holder: files)
 		{
 			inte.set(holder);
@@ -109,24 +104,25 @@ public class Tester
 	{
 		File person = pat.toFile();
 		File[] levels = person.listFiles();
-		PrintWriter wri = new PrintWriter(person.getName()+".csv");
+		PrintWriter wri = new PrintWriter(String.format("%s%s%s","C:\\Users\\Maggie\\git\\AppDevelopment\\Statistics\\",person.getName(),".csv"));
+		Interpretor inte = new Interpretor();
 		for(File holder: levels)
 			if(holder.getName().contains("Log"))
-				runLog(holder);
+				runLog(holder,inte);
 			else if(holder.getName().contains("Notification"))
-				runNote(holder);
+				runNote(holder,inte);
 			else if(holder.getName().contains("Device"))
-				runNote(holder);
+				runNote(holder,inte);
 			else if(holder.getName().contains("Browser"))
-				runBro(holder);
+				runBro(holder,inte);
 			else if(holder.getName().contains("Location"))
-				runLoc(holder);
-		wri.write(String.format("Inputted Profile Information %d pieces%s",Interpretor.countP,"\n"));
-		wri.write(String.format("Inputted Message Information %d pieces%s",Interpretor.countM,"\n"));
-		wri.write(String.format("Inputted Notification Information %d pieces%s",Interpretor.countN,"\n"));
-		wri.write(String.format("Inputted Device Event Information %d pieces%s",Interpretor.countE,"\n"));
-		wri.write(String.format("Inputted Browsing Information %d pieces%s",Interpretor.countQ,"\n"));
-		wri.write(String.format("Inputted Location Information %d pieces%s",Interpretor.countL,"\n"));
+				runLoc(holder,inte);
+		wri.write(String.format("Inputted Profile Information %d pieces%s",inte.countP,"\n"));
+		wri.write(String.format("Inputted Message Information %d pieces%s",inte.countM,"\n"));
+		wri.write(String.format("Inputted Notification Information %d pieces%s",inte.countN,"\n"));
+		wri.write(String.format("Inputted Device Event Information %d pieces%s",inte.countE,"\n"));
+		wri.write(String.format("Inputted Browsing Information %d pieces%s",inte.countQ,"\n"));
+		wri.write(String.format("Inputted Location Information %d pieces%s",inte.countL,"\n"));
 		wri.write("\n\n");
 		wri.write(String.format("Stored Profile Objects %d pieces%s",Profile.pros.size(),"\n"));
 		wri.write(String.format("Stored AbsLocation Objects %d pieces%s",AbsLocation.locations.size(),"\n"));
@@ -147,8 +143,8 @@ public class Tester
 		int counter = 1;
 		List<Message> mess = new ArrayList<Message>(Message.mess.keySet());
 		Collections.sort(mess,Event.comp);
-		Message holder1 = mess.get(0);
-		wri.write(String.format("%s,%s,%s,%s,%s%s",String.format("%s %s %s", holder1.getFrom().getName(),holder1.getFrom().getDial(),holder1.getFrom().getEmail()),"User",holder1.getTime().date,holder1.getContent(),holder1.getLocation(),"\n"));
+		Message holder1 = mess.size()!=0?mess.get(0):null;
+		wri.write(holder1!=null?String.format("%s,%s,%s,%s,%s%s",String.format("%s %s %s", holder1.getFrom().getName(),holder1.getFrom().getDial(),holder1.getFrom().getEmail()),"User",holder1.getTime().date,holder1.getContent(),holder1.getLocation(),"\n"):"");
 		for(int i=1; i<mess.size(); i++)
 		{
 			holder1 = mess.get(i);
@@ -166,8 +162,8 @@ public class Tester
 		counter = 1;
 		List<Event> eves = new ArrayList<Event>(Event.eves.keySet());
 		Collections.sort(eves,Event.comp);
-		Event holder2 = eves.get(0);
-		wri.write(String.format("%s,%s,%s%s",holder2.des.toString().replaceAll("\n",""),holder2.getTime().date,((AbsLocation)holder2.getLocation()).getSource(),"\n"));
+		Event holder2 = eves.size()!=0?eves.get(0):null;
+		wri.write(holder2!=null?String.format("%s,%s,%s%s",holder2.des.toString().replaceAll("\n",""),holder2.getTime().date,((AbsLocation)holder2.getLocation()).getSource(),"\n"):"");
 		for(int i=1; i<eves.size(); i++)
 		{
 			holder2 = eves.get(i);
@@ -178,15 +174,15 @@ public class Tester
 				continue;
 			counter++;
 		}
-		wri.write(String.valueOf(eves.size()/counter));
+		wri.write(eves.size()!=0?String.valueOf(eves.size()/counter):"");
 		wri.write(" per day\n");
 		wri.write("\n\n");
 		wri.write(String.format("%s,%s,%s%s","Query","Time","Source","\n"));
 		counter = 1;
 		List<Query> ques = new ArrayList<Query>(Query.ques.keySet());
 		Collections.sort(ques,Event.comp);
-		Query holder3 = ques.get(0);
-		wri.write(String.format("%s,%s,%s%s",holder3.getQuery(),holder3.getTime().date,holder3.getLocation(),"\n"));
+		Query holder3 = ques.size()!=0?ques.get(0):null;
+		wri.write(holder3!=null?String.format("%s,%s,%s%s",holder3.getQuery(),holder3.getTime().date,holder3.getLocation(),"\n"):"");
 		for(int i=1; i<ques.size(); i++)
 		{
 			holder3 = ques.get(i);
@@ -197,7 +193,7 @@ public class Tester
 				continue;
 			counter++;
 		}
-		wri.write(String.valueOf(ques.size()/counter));
+		wri.write(ques.size()==0?"0":String.valueOf(ques.size()/counter));
 		wri.write(" per day\n");
 		wri.write("\n\n");
 		List<Time> times = new ArrayList<Time>();
@@ -219,7 +215,7 @@ public class Tester
 				continue;
 			counter2++;
 		}
-		wri.write(String.valueOf(counter/counter2));
+		wri.write(PhyLocation.locations.size()!=0?String.valueOf(counter/counter2):"0");
 		wri.write(" pieces of advented per day\n");
 		wri.write(String.valueOf(PhyLocation.locations.size()/counter2));
 		wri.write(" native objects per day\n");
@@ -229,7 +225,8 @@ public class Tester
 	
 	public static void main(String[] args) throws IOException 
 	{
-		
+		runFile(Paths.get("C:\\PocketData\\P031"));
+		System.out.println(Interpretor.keyCount);
 	}
 
 }
