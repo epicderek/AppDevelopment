@@ -38,9 +38,9 @@ public class Interpretor
 	public int countM,countN,countQ,countE,countP,countL,countI;
 	static
 	{
-		keys = new String[]{"AIzaSyAe67qjsHOQomCNyIIyi_UKm5uqNvTGcvA","AIzaSyDzqYwvSvnHhBAPf0ZisEPCuZWZv2ldry4","AIzaSyDG4Gjp_mW0T25VA17Jmk5pYJRJUFvnbUA","AIzaSyDnPcdlEZyqR6Cr2ite9aAvoTMDzDhty_E","AIzaSyDnfk0csfpKC1G12EUh4BzyuXOoa_B0fKE","AIzaSyCZ-htBGcdRL3edgKX3XIHbvcH52Z-ITIk","AIzaSyCmhv5_zalf68jlqsdeZAbwJxzsbCy7U4k","AIzaSyC7_s8YWKxnaKqswFBp7riTccHxNI3EBoA","AIzaSyCmhv5_zalf68jlqsdeZAbwJxzsbCy7U4k","AIzaSyC-a4AUdyCipXHFev5hopOUz_Mo0QVg2Tk"};
-		key = keys[5];
-		keyCount = 5;
+		keys = new String[]{"AIzaSyAe67qjsHOQomCNyIIyi_UKm5uqNvTGcvA","AIzaSyDzqYwvSvnHhBAPf0ZisEPCuZWZv2ldry4","AIzaSyDG4Gjp_mW0T25VA17Jmk5pYJRJUFvnbUA","AIzaSyDnPcdlEZyqR6Cr2ite9aAvoTMDzDhty_E","AIzaSyDnfk0csfpKC1G12EUh4BzyuXOoa_B0fKE","AIzaSyCZ-htBGcdRL3edgKX3XIHbvcH52Z-ITIk","AIzaSyCmhv5_zalf68jlqsdeZAbwJxzsbCy7U4k","AIzaSyC7_s8YWKxnaKqswFBp7riTccHxNI3EBoA","AIzaSyC-a4AUdyCipXHFev5hopOUz_Mo0QVg2Tk"};
+		key = keys[0];
+		keyCount = 0;
 		uFirst = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
 		uSecond = "&key=";
 	}
