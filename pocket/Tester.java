@@ -225,8 +225,7 @@ public class Tester
 	
 	public static void main(String[] args) throws IOException 
 	{
-		runFile(Paths.get("C:\\PocketData\\P031"));
-		System.out.println(Interpretor.keyCount);
+		
 	}
 
 }
