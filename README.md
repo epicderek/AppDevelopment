@@ -1,4 +1,4 @@
-# AppDevelopment
+# POCKET
 
 This package, dedicated to the development of Personally Oriented Collective Knowledge through Efficient Tracking, offers a preliminary experimentation and implementation of it. The interface collectively parses JSON data for specific applications and automatic storage as native objects. This description includes statistics and analysis of the parsing of personal information and storage as native objects. 
  
@@ -106,7 +106,7 @@ And to reset the interpreter to target a different file, do this.
 	
 The mode of interpretation has to be chosen manually in accord with the file to be processed. For example, to process a Notification file, do this.
 	
-	         Event[] eve = inte.processNote();
+	             Event[] eve = inte.processNote();
 	
 To start the static counter, which keeps track of the number of pieces of information consumed, do this.
 
