@@ -22,7 +22,7 @@ And in case of a lack of specific information, it can be instantiated this way.
 
                     Profile pro = Profile.processProfile(String name);
 
-According to a statistics of the contact informations scanned from a userand  their resultant storage as Profile Objects, it is shown that 
+According to a statistics of the contact informations scanned from a user and  their resultant storage as Profile Objects, it is shown that 
 
                                         Inputed Profile Information 45917 pieces
                                            Outputed Profile Objects 1902 pieces
