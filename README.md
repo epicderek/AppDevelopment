@@ -22,7 +22,7 @@ And in case of a lack of specific information, it can be instantiated this way.
 
                     Profile pro = Profile.processProfile(String name);
 
-According to a statistics of the contact informations scanned from a user in a day and their resultant storage as Profile Objects, it is shown that 
+According to a statistics of the contact informations scanned from a userand  their resultant storage as Profile Objects, it is shown that 
 
                                         Inputed Profile Information 45917 pieces
                                            Outputed Profile Objects 1902 pieces
@@ -46,7 +46,7 @@ The specific information of a location may be inquired by invoking the method ge
 
                     String zip = loc.getInfo(LocationType.ZIP);
 
-According to a statistics of the record of locations a user occasions at instants in a day and their resultant storage as Profile Objects, it is shown that
+According to a statistics of the record of locations a user occasions at instants and their resultant storage as Profile Objects, it is shown that
 
                                         Inputed Location Information 3331 pieces
                                            Outputted Location Objects 252 pieces
@@ -78,7 +78,7 @@ They be instantiated as such.
                  Email em = Email.processEmail(Time time, Profile from, Profile to, String cont,
                                     AbsLocation space);
 
-According to the statistics of Message objects of a user per day,
+According to the statistics of Message objects of a user,
 
                                   Inputed Message Information 150 pieces
                                    Outputed Message Objects 150 pieces
