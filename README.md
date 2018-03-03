@@ -108,7 +108,7 @@ The mode of interpretation has to be chosen manually in accord with the file to 
 	
 	             Event[] eve = inte.processNote();
 	
-To start the static counter, which keeps track of the number of pieces of information consumed, do this.
+To start the counter for a specific type of data, in this case message, which keeps track of the number of pieces of information processed by this interpreter, do this.
 
                  Profile[] pros = inte.processLog(true);
 
