@@ -58,7 +58,7 @@ A PhyLocation is printed in this manner:
 
                                        Location
                                        Type as ["premise"]
-                                       902 Brinton Rd, Pittsburgh, PA 15221, USA
+                                       001 Brinton Rd, Pittsburgh, PA 15221, USA
                                        at Times [2080841175, 2080964707, 2081105825, 2081264646,
                                        2081415416, 2081565481, 2081715565,2081865620,     
                                        2082015629].  
@@ -85,10 +85,10 @@ According to the statistics of Message objects of a user,
                                               Difference is 0,
 of which a standard printed version adopts the form of
 
-			            Message from Steven Dang to User
+			            Message from A Hamilton to User
                                     at Time 970097405
                                     in com.Slack
-                                    of "where di u heara bout it?".
+                                    of "Union?".
 
 Note that in the creation of Message objects, Profile Objects are created to accommodate the people involved.
 
